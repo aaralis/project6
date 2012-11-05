@@ -21,13 +21,13 @@ class Server{
         
         try{
           if(message.charAt(7) == ':'){//if message is from the requester then...
-            Location location = encodeLocationString(message.substring(7, message.length()));
+            Location location = encodeLocationString(message.substring(7, message.length())); //
             
-            if(location == null){
-              System.out.println("Requester message failure!!!");
-              channel.sendMessage("The location you submitted was not recognized as a valid location!!!", clientID);
-              return;
+            if(location == null){//if location was assigned a null value then...
+              channel.sendMessage("The location you submitted was invalid!!!", clientID);//informs the requester that the location they submitted was invalid
             }
+            
+            assert (location != null) : "Requester message failure!!!"; //asserts that location must contain a value at this point
             
             if(respondersID.size() == 0){//if there are no responders on call then...
               channel.sendMessage("Searching:", clientID); //tells the requester that it needs to wait
