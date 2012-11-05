@@ -48,8 +48,8 @@ class Server{
           }else {
             System.out.println("message format error!!!");
           }
-       }catch(ChannelException e){//catch for all that channel stuff
-         System.out.println("message sending failure!!!");
+        }catch(ChannelException e){//catch for all that channel stuff
+          System.out.println("message sending failure!!!");
           e.printStackTrace();
         }
       }
@@ -58,7 +58,7 @@ class Server{
   
   public static void main(String[] args){
     Scanner s = new Scanner(System.in);
-    Server server = new Server(8188);
+    Server server = new Server(Integer.parseInt(args[0]));
     
     while(true){
       if(s.nextLine().equals("exit")){
