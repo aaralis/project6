@@ -1,3 +1,17 @@
+/**
+ * Project 6 -- Server
+ * A server that interacts with the Request and Response GUI's.  The server itself has a CLI and can be 
+ * terminated by typing exit into the console.  To run the server requires one argmuent, the port it is
+ * to run on.  
+ *
+ * @author Alex Aralis
+ *
+ * @recitation 004 Julian James Stephen
+ *
+ * @date 11/4/12
+ *
+ */
+
 import edu.purdue.cs.cs180.channel.*;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -9,8 +23,8 @@ class Server{
   private LinkedList<Location> requestersLocation;//list of places that the requesters are located at.  Corresponds to the requester ID list
   private LinkedList<String> respondersTeam;//list of teams that the responders are on.  Corresponds to the responder ID list.
   
-  public Server(int port){//init of all the object variables for the server
-    channel = new TCPChannel(port);
+  public Server(int port){
+    channel = new TCPChannel(port);//init of all the object variables for the server
     requestersID = new LinkedList<Integer>();
     respondersID = new LinkedList<Integer>();
     requestersLocation = new LinkedList<Location>();
@@ -51,7 +65,7 @@ class Server{
               channel.sendMessage("Assigned:" + teamString, requestersID.removeFirst());//tell the longest waiting requester a responder has been assigned and the team of that responder
               channel.sendMessage("Assigned:" + locationToString(requestersLocation.removeFirst()), clientID);//tell the responder they have been assigned and the location of the requester they are picking up
             }
-          } else {
+          } else {//if the ':' was not found at either index 7 or 8 then...
             System.out.println("message format error. ':' in the wrong place!!!");
             channel.sendMessage("message format error. ':' in the wrong place!!!", clientID);
           }
@@ -63,7 +77,16 @@ class Server{
     });
   }
   
-  private Location encodeLocationString(String locationString) throws ChannelException{
+  /**
+   * Converts the passed string into a constant of enum Location
+   * 
+   * @param locationString 
+   * the string of the location
+   * 
+   * @return Location
+   * the location as a member of enum Location or null if the string didn't match anything
+   */
+  private Location encodeLocationString(String locationString){
     
     if (locationString.equals("CL50 - Class of 1950 Lecture Hall")){
       return Location.CL50;
@@ -80,6 +103,15 @@ class Server{
     }
   }
   
+  /**
+   * Converts the passed constant of enum Location into a string to send to the Responer's client
+   * 
+   * @param Location loc
+   * the enum Location to be converted to a string
+   * 
+   * @return String
+   * the String to be passed to the Responder's client
+   */
   private String locationToString(Location loc){
     switch (loc) {
       case CL50:
@@ -98,10 +130,10 @@ class Server{
   }
   
   public static void main(String[] args){
-    Scanner s = new Scanner(System.in);
-    Server server = new Server(Integer.parseInt(args[0]));
+    Scanner s = new Scanner(System.in);//to get input from the console
+    Server server = new Server(Integer.parseInt(args[0]));//creates a server object that uses a port passed from the comsole
     
-    while(true){
+    while(true){//a loop that runs until "exit" is typed into the console
       if(s.nextLine().equals("exit")){
         try{
           server.channel.close();
